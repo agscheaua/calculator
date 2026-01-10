@@ -1,0 +1,40 @@
+*{
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+
+}
+
+.containerCalculator {
+    padding: 200px 50px 50px 50px;
+} 
+ 
+.containerNumbers {
+    display: flex;
+    flex-wrap: wrap;
+
+
+}
+
+.number {
+    width: 60px;
+    height: 75px;
+    padding: 20px;
+    font-size: 28px;
+}
+
+.equalButton {
+    display: inline;
+    width: 120px;
+    height: 75px;
+    padding: 20px; 
+    font-size: 28px;
+}
+
+.backSpace {
+    display: inline;
+    width: 60px;
+    height: 75px;
+    padding: 20px;
+    font-size: 28px;  
+} 
