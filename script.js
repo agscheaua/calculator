@@ -2,39 +2,19 @@
 const invalidInput = "Invalid input, try again!";
 
 function addNum (para1, para2) {
-    if ( typeof para1 !== 'number' || typeof para2 !== 'number' ) {
-        return invalidInput;
-    }
-    else {
-        return para1 + para2;
-    };
+    return Number(para1) + Number(para2); 
 };
 function substractNum (para1, para2) {
-    if ( typeof para1 !== 'number' || typeof para2 !== 'number' ) {
-        return invalidInput;
-    }
-    else {
-        return para1 - para2;
-    };
-}
+    return Number(para1) - Number(para2);
+};
 function multiplyNum (para1, para2) {
-    if ( typeof para1 !== 'number' || typeof para2 !== 'number' ) {
-        return invalidInput;
-    }
-    else {
-        return para1 * para2;
-    };
-}
+    return Number(para1) * Number(para2);
+};
 function divideNum (para1, para2) {
-    if ( typeof para1 !== 'number' || typeof para2 !== 'number' ) {
-        return invalidInput;
-    }
-    else {
-        return para1 / para2;
-    }
-}
+    return Number(para1) / Number(para2);
+};
 
-function operate (operator, firstOperand, secondOperand) {
+function operate (firstOperand, operator, secondOperand) {
     if (operator === '+') {
         return addNum(firstOperand, secondOperand);
     }
@@ -52,20 +32,58 @@ function operate (operator, firstOperand, secondOperand) {
     };
 };
 
+let firstNumber = '';
+let operatorSign = '';
+let secondNumber = '';
+
+const containerCalculator = document.querySelector('.containerCalculator');
+const containerScreen = document.querySelector('.containerScreen');
+const containerNumbers = document.querySelectorAll('.containerNumbers');
+const clearAll = document.querySelector('.clearAll');
+
 function inputCalculation () {
-    let firstNumber;
-    let operatorSign;
-    let secondNumber;
+    containerNumbers.forEach( (item) => { 
+        item.addEventListener('click', (elem) => {
+            if (elem.target.textContent !== '+') {
+                if (!operatorSign) {
+                    firstNumber += elem.target.textContent.trim();
+                    containerScreen.textContent += elem.target.textContent.trim(); 
+                }
+                else{
+                    secondNumber += elem.target.textContent.trim();
+                    containerScreen.textContent += elem.target.textContent.trim();
+                };
+            }
+            else if (elem.target.textContent === '+') {
+                if (!operatorSign) {
+                    operatorSign = elem.target.textContent.trim();
+                    containerScreen.textContent += elem.target.textContent.trim();
+                }
+                else{
+                    containerScreen.textContent = operate (firstNumber, operatorSign, secondNumber);
+                    firstNumber = containerScreen.textContent;
+                    operatorSign = '';
+                    secondNumber = '';
+                };
+            }
+            else {}; 
 
-    const containerCalculator = document.querySelector('.containerCalculator');
-    containerCalculator.addEventListener('click', (item) => {
-        firstNumber = item.target.textContent;
-        containerScreen.textContent = firstNumber; 
-        console.log(firstNumber);
-    } ); 
-    
-    const containerScreen = document.querySelector('.containerScreen');
+            console.log(`firstNumber is: ${firstNumber}`);
+            console.log(`operatorSign is: ${operatorSign}`); 
+            console.log(`secondNumber is: ${secondNumber}`);
+            console.log(containerScreen.textContent);
 
+        } ); 
+    } );
 
-};
-console.log( inputCalculation() ); 
+    clearAll.addEventListener('click', (elem) => {
+        containerScreen.textContent = ''; 
+        firstNumber = '';
+        operatorSign = '';
+        secondNumber = ''; 
+    } );
+
+};    
+  
+console.log( inputCalculation() );    
+ 

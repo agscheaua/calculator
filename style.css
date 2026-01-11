@@ -1,4 +1,4 @@
-*{
+* {
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
@@ -11,6 +11,14 @@
     height: 650px;
 }
 
+.containerScreen {
+    border: 1px solid black;
+    height: 100px;
+    width: 350px;  
+    padding: 10px;
+    font-size: 20px;
+}
+
 div button {
     height: 70px;
     width: 70px;
@@ -18,8 +26,12 @@ div button {
 
 }
 
-div input {
-    height: 80px;
-    width: 370px;
-    font-size: 20px;
-} 
+.containerNumbers {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.containerOperators {
+    display: flex;
+}
+
