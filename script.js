@@ -28,23 +28,24 @@ function operate (firstOperand, operator, secondOperand) {
       return divideNum(firstOperand, secondOperand);
     }
     else {
-        return invalidInput;
     };
 };
 
 let firstNumber = '';
 let operatorSign = '';
 let secondNumber = '';
+let choiceOperator = ['+', '-', '*', '/'];
 
 const containerCalculator = document.querySelector('.containerCalculator');
 const containerScreen = document.querySelector('.containerScreen');
 const containerNumbers = document.querySelectorAll('.containerNumbers');
 const clearAll = document.querySelector('.clearAll');
+const equal = document.querySelector('.equal');
 
 function inputCalculation () {
     containerNumbers.forEach( (item) => { 
         item.addEventListener('click', (elem) => {
-            if (elem.target.textContent !== '+') {
+            if ( !choiceOperator.includes(elem.target.textContent) ) {
                 if (!operatorSign) {
                     firstNumber += elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim(); 
@@ -54,17 +55,28 @@ function inputCalculation () {
                     containerScreen.textContent += elem.target.textContent.trim();
                 };
             }
-            else if (elem.target.textContent === '+') {
-                if (!operatorSign) {
+            else if ( choiceOperator.includes(elem.target.textContent) ) {
+                if (!operatorSign && firstNumber) {
                     operatorSign = elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim();
                 }
-                else{
-                    containerScreen.textContent = operate (firstNumber, operatorSign, secondNumber);
-                    firstNumber = containerScreen.textContent;
-                    operatorSign = '';
-                    secondNumber = '';
+                else if (elem.target.textContent !== operatorSign && firstNumber && !secondNumber) {
+                    operatorSign = elem.target.textContent.trim();
+                    containerScreen.textContent = `${firstNumber}${operatorSign}`;
+                }
+                else if (elem.target.textContent === operatorSign && firstNumber && secondNumber) {
+                    containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
+                    firstNumber = operate(firstNumber, operatorSign, secondNumber); 
+                    operatorSign = elem.target.textContent.trim(); 
+                    secondNumber = ''; 
+                }
+                else {
+                    containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
+                    firstNumber = operate(firstNumber, operatorSign, secondNumber); 
+                    operatorSign = elem.target.textContent.trim(); 
+                    secondNumber = '';  
                 };
+         
             }
             else {}; 
 
@@ -74,6 +86,18 @@ function inputCalculation () {
             console.log(containerScreen.textContent);
 
         } ); 
+    } );
+
+    equal.addEventListener('click', (elem) => {  
+        if (firstNumber === '' || operatorSign === '' || secondNumber === '') {
+            containerScreen.textContent = "ERROR";
+        }
+        else {      
+            containerScreen.textContent = operate (firstNumber, operatorSign, secondNumber);
+            firstNumber = '';
+            operatorSign = '';
+            secondNumber = '';
+        };
     } );
 
     clearAll.addEventListener('click', (elem) => {
