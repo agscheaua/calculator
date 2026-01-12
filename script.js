@@ -15,7 +15,10 @@ function divideNum (para1, para2) {
 };
 
 function operate (firstOperand, operator, secondOperand) {
-    if (operator === '+') {
+    if (operator === '/' && secondOperand === '0') {
+        return 'ERROR';
+    }
+    else if (operator === '+') {
         return addNum(firstOperand, secondOperand);
     }
     else if (operator === '-') {
@@ -47,39 +50,79 @@ function inputCalculation () {
         item.addEventListener('click', (elem) => {
             if ( !choiceOperator.includes(elem.target.textContent) ) {
                 if (!operatorSign) {
-                    firstNumber += elem.target.textContent.trim();
-                    containerScreen.textContent += elem.target.textContent.trim(); 
+                    if (containerScreen.textContent === 'ERROR') {  
+                        containerScreen.textContent = '';
+                        firstNumber += elem.target.textContent.trim();
+                        containerScreen.textContent += elem.target.textContent.trim(); 
+                    }
+                    else {
+                        firstNumber += elem.target.textContent.trim();
+                        containerScreen.textContent += elem.target.textContent.trim(); 
+                    };
                 }
                 else{
-                    secondNumber += elem.target.textContent.trim();
-                    containerScreen.textContent += elem.target.textContent.trim();
-                };
+                        secondNumber += elem.target.textContent.trim();
+                        containerScreen.textContent += elem.target.textContent.trim();  
+                    };
             }
             else if ( choiceOperator.includes(elem.target.textContent) ) {
-                if (!operatorSign && firstNumber) {
+                if (firstNumber === '-' && choiceOperator.includes(elem.target.textContent)) { 
+                    containerScreen.textContent = 'ERROR';
+                    firstNumber = '';
+                    operatorSign = '';
+                } 
+                else if (containerScreen.textContent === 'ERROR') {
+                    containerScreen.textContent === 'ERROR';
+                } 
+                else if (!operatorSign && firstNumber) {
                     operatorSign = elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim();
+                }
+                else if (elem.target.textContent === '-' && firstNumber === '') { 
+                    firstNumber += elem.target.textContent.trim();
+                    containerScreen.textContent += elem.target.textContent.trim();
+                }
+                else if (firstNumber === '') {
+                    containerScreen.textContent = 'ERROR';
                 }
                 else if (elem.target.textContent !== operatorSign && firstNumber && !secondNumber) {
                     operatorSign = elem.target.textContent.trim();
                     containerScreen.textContent = `${firstNumber}${operatorSign}`;
                 }
                 else if (elem.target.textContent === operatorSign && firstNumber && secondNumber) {
-                    containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
-                    firstNumber = operate(firstNumber, operatorSign, secondNumber); 
-                    operatorSign = elem.target.textContent.trim(); 
-                    secondNumber = ''; 
+                    if (operate(firstNumber, operatorSign, secondNumber) === 'ERROR') {
+                        containerScreen.textContent = 'ERROR';
+                        firstNumber = '';
+                        operatorSign = '';
+                        secondNumber = '';
+                        console.log(operate(firstNumber, operatorSign, secondNumber));
+                    }
+                    else {
+                        containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
+                        firstNumber = operate(firstNumber, operatorSign, secondNumber); 
+                        operatorSign = elem.target.textContent.trim(); 
+                        secondNumber = ''; 
+                    };
                 }
                 else {
-                    containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
-                    firstNumber = operate(firstNumber, operatorSign, secondNumber); 
-                    operatorSign = elem.target.textContent.trim(); 
-                    secondNumber = '';  
+                    if (operate(firstNumber, operatorSign, secondNumber) === 'ERROR') {
+                        containerScreen.textContent = 'ERROR';
+                        firstNumber = '';
+                        operatorSign = '';
+                        secondNumber = '';
+
+                    }
+                    else {
+                        containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
+                        firstNumber = operate(firstNumber, operatorSign, secondNumber); 
+                        operatorSign = elem.target.textContent.trim(); 
+                        secondNumber = ''; 
+                    }; 
                 };
          
             }
-            else {}; 
-
+            else {};
+        
             console.log(`firstNumber is: ${firstNumber}`);
             console.log(`operatorSign is: ${operatorSign}`); 
             console.log(`secondNumber is: ${secondNumber}`);
@@ -88,15 +131,15 @@ function inputCalculation () {
         } ); 
     } );
 
-    equal.addEventListener('click', (elem) => {  
-        if (firstNumber === '' || operatorSign === '' || secondNumber === '') {
-            containerScreen.textContent = "ERROR";
-        }
-        else {      
+    equal.addEventListener('click', (elem) => {
+        if (firstNumber && operatorSign && secondNumber) {      
             containerScreen.textContent = operate (firstNumber, operatorSign, secondNumber);
             firstNumber = '';
             operatorSign = '';
             secondNumber = '';
+        }
+        else {
+            containerScreen.textContent = 'ERROR'; 
         };
     } );
 
