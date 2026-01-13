@@ -6,20 +6,24 @@
 }
 
 .containerCalculator {
-    padding: 200px 50px 50px 50px;
-    width: 500px;
+    padding: 50px 50px 50px 50px;
+    width: 450px;  
     height: 650px;
-}
+} 
 
 .containerScreen {
+    display: flex;
+}
+
+.screen{
     border: 1px solid black;
     height: 100px;
     width: 350px;  
-    padding: 10px;
-    font-size: 20px;
+    padding: 10px; 
+    font-size: 40px;  
 }
 
-div button {
+div button { 
     height: 70px;
     width: 70px;
     font-size: 20px;
@@ -28,10 +32,22 @@ div button {
 
 .containerNumbers {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
 }
 
-.containerOperators {
+
+.equal {
+    width: 350px;
+}
+
+.containerInputControl {
     display: flex;
 }
 
+.clearAll {
+    width: 175px;
+}
+
+.clearOne {
+    width: 175px;
+}

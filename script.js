@@ -40,20 +40,36 @@ let secondNumber = '';
 let choiceOperator = ['+', '-', '*', '/'];
 
 const containerCalculator = document.querySelector('.containerCalculator');
-const containerScreen = document.querySelector('.containerScreen');
+const containerScreen = document.querySelector('.screen');
 const containerNumbers = document.querySelectorAll('.containerNumbers');
 const clearAll = document.querySelector('.clearAll');
 const equal = document.querySelector('.equal');
+const clearOne = document.querySelector('.clearOne');
 
 function inputCalculation () {
     containerNumbers.forEach( (item) => { 
         item.addEventListener('click', (elem) => {
+            elem.stopPropagation();
             if ( !choiceOperator.includes(elem.target.textContent) ) {
                 if (!operatorSign) {
-                    if (containerScreen.textContent === 'ERROR') {  
+                    if (containerScreen.textContent === 'ERROR' && elem.target.textContent !== '.') {   
                         containerScreen.textContent = '';
                         firstNumber += elem.target.textContent.trim();
                         containerScreen.textContent += elem.target.textContent.trim(); 
+                    }
+                    else if (containerScreen.textContent === 'ERROR' && elem.target.textContent === '.') {
+                        containerScreen.textContent = 'ERROR'; 
+                    }
+                    else if (containerScreen.textContent && firstNumber === '') {
+                        containerScreen.textContent = '';
+                        firstNumber += elem.target.textContent.trim();
+                        containerScreen.textContent += elem.target.textContent.trim(); 
+                    }
+                    else if ( firstNumber === '' && elem.target.textContent === '.') {
+                        containerScreen.textContent = 'ERROR'; 
+                    }
+                    else if (firstNumber.indexOf('.') > -1 && elem.target.textContent === '.') {
+                        console.log('only 1 "." in firstNumber :D');
                     }
                     else {
                         firstNumber += elem.target.textContent.trim();
@@ -61,8 +77,16 @@ function inputCalculation () {
                     };
                 }
                 else{
-                        secondNumber += elem.target.textContent.trim();
-                        containerScreen.textContent += elem.target.textContent.trim();  
+                        if (secondNumber === '' && elem.target.textContent === '.') {
+                            containerScreen.textContent = "ERROR";
+                        }
+                        else if (secondNumber.indexOf('.') > -1 && elem.target.textContent === '.') {
+                            console.log('only 1 "." in secondNumber :D');
+                        }
+                        else {
+                            secondNumber += elem.target.textContent.trim();
+                            containerScreen.textContent += elem.target.textContent.trim();
+                        };  
                     };
             }
             else if ( choiceOperator.includes(elem.target.textContent) ) {
@@ -71,14 +95,11 @@ function inputCalculation () {
                     firstNumber = '';
                     operatorSign = '';
                 } 
-                else if (containerScreen.textContent === 'ERROR') {
-                    containerScreen.textContent === 'ERROR';
-                } 
                 else if (!operatorSign && firstNumber) {
                     operatorSign = elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim();
                 }
-                else if (elem.target.textContent === '-' && firstNumber === '') { 
+                else if (elem.target.textContent === '-' && firstNumber === '' && containerScreen.textContent !== 'ERROR') {  
                     firstNumber += elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim();
                 }
@@ -95,7 +116,6 @@ function inputCalculation () {
                         firstNumber = '';
                         operatorSign = '';
                         secondNumber = '';
-                        console.log(operate(firstNumber, operatorSign, secondNumber));
                     }
                     else {
                         containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.target.textContent.trim()}`;
@@ -132,14 +152,15 @@ function inputCalculation () {
     } );
 
     equal.addEventListener('click', (elem) => {
-        if (firstNumber && operatorSign && secondNumber) {      
+        if (String(firstNumber) && operatorSign && secondNumber) {      
             containerScreen.textContent = operate (firstNumber, operatorSign, secondNumber);
             firstNumber = '';
             operatorSign = '';
             secondNumber = '';
+            return operate(firstNumber, operatorSign, secondNumber);
         }
         else {
-            containerScreen.textContent = 'ERROR'; 
+            containerScreen.textContent = 'ERROR';   
         };
     } );
 
@@ -150,7 +171,26 @@ function inputCalculation () {
         secondNumber = ''; 
     } );
 
+    clearOne.addEventListener('click', (elem) => { 
+        if (firstNumber && !operatorSign) {
+            let firstNumberCleared = String(firstNumber).slice(0, -1); 
+            firstNumber = firstNumberCleared;
+            containerScreen.textContent = firstNumber;  
+        }
+        else if (firstNumber && operatorSign && !secondNumber) {
+            let operatorSignCleared = String(operatorSign).slice(0, -1);
+            operatorSign = operatorSignCleared;
+            containerScreen.textContent = firstNumber + operatorSign;
+        }
+        else if (firstNumber && operatorSign && secondNumber) {
+            let secondNumberCleared = String(secondNumber).slice(0, -1);
+            secondNumber = secondNumberCleared;
+            containerScreen.textContent = firstNumber + operatorSign + secondNumber;
+        }
+        else {
+            containerScreen.textContent = 'ERROR';
+        }
+    } );
 };    
   
 console.log( inputCalculation() );    
- 
