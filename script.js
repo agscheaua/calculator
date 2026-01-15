@@ -199,121 +199,99 @@ function inputCalculation () {
 };      
 console.log( inputCalculation() );    
 
-const numbersOperands = ['1','2','3','4','5','6','7','8','9','0','.'];
-const equalButton = ['enter'];
+const numbersOperands = ['1','2','3','4','5','6','7','8','9','0']; 
+const pointFloat = ['.']
+choiceOperator = ['+', '-', '*', '/'];
+const equalButton = ['Enter'];
 const clearAllInputs = ['`'];
-const clearOneInput = ['backSpace'];
+const clearOneInput = ['Backspace'];
+ 
+function inputCalculationKeyboard () {
+    document.body.addEventListener('keydown', (elem) => {
+        if (numbersOperands.includes(elem.key) && !operatorSign ) { 
+            if (firstNumber === '') {
+                firstNumber += elem.key;; 
+                containerScreen.textContent += elem.key;
+            }
+            else if (firstNumber && !operatorSign) { 
+                firstNumber += elem.key;    
+                containerScreen.textContent += elem.key;
+            }
+            else {  
 
-document.body.addEventListener('keydown', (elem) => {  
-    if ( numbersOperands.includes(elem.key.toLowerCase()) ) {
-        if (numbersOperands.includes(elem.key.toLowerCase())) {
-            if (containerScreen.textContent === 'ERROR' && elem.key.toLowerCase() !== '.') {   
+            }; 
+        }
+
+        else if (choiceOperator.includes(elem.key) ) {
+            if (containerScreen.textContent === 'ERROR' && elem.key === '-' && firstNumber === '') {
                 containerScreen.textContent = '';
-                firstNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase(); 
+                firstNumber += elem.key;
+                containerScreen.textContent += elem.key; 
             }
-            else if (containerScreen.textContent === 'ERROR' && elem.target.textContent === '.') {
-                containerScreen.textContent = 'ERROR'; 
+            else if (elem.key === '-' && firstNumber.indexOf('-') === -1 && firstNumber === '') {
+                firstNumber += elem.key;
+                containerScreen.textContent += elem.key;
             }
-            else if (containerScreen.textContent && firstNumber === '') {
-                containerScreen.textContent = '';
-                firstNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase(); 
-            }
-            else if ( firstNumber === '' && elem.target.textContent === '.') {
-                containerScreen.textContent = 'ERROR'; 
-            }
-            else if (firstNumber && operatorSign && elem.key.toLowerCase() !== '.') {
-                secondNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase();
-            } 
-            else if (elem.key.toLowerCase() === '.' && secondNumber.includes('.') > -1) {
-                secondNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase();
-            }
-            else if (firstNumber && operatorSign && firstNumber.includes('.') > -1) {
-                secondNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase();
-            } 
-            else {
-                firstNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase();  
-            };
-            }
-        else{ 
-            if (secondNumber === '' && elem.key.toLowerCase() === '.') {
-                containerScreen.textContent = "ERROR";
-            }
-            else if (secondNumber.indexOf('.') > -1 && elem.key.toLowerCase() === '.' ) {
-                onsole.log('only 1 "." in secondNumber :D');
-            }
-            else if (containerScreen.textContent === 'ERROR' && firstNumber && operatorSign) {
+            else if (elem.key === '-' && firstNumber.indexOf('-') > -1) {
+                firstNumber = '';
                 containerScreen.textContent = 'ERROR';
+            } 
+            else if (choiceOperator.includes(elem.key) && firstNumber === '') {
+                containerScreen.textContent = 'ERROR';
+            } 
+            else if (firstNumber && !operatorSign) {
+                operatorSign += elem.key;
+                containerScreen.textContent += elem.key;
             }
-            else {
-                secondNumber += elem.key.toLowerCase();
-                containerScreen.textContent += elem.key.toLowerCase();
-                };  
-            };
-    }
-    else if ( choiceOperator.includes(elem.key.toLowerCase()) ) {
-        if (firstNumber === '-' && choiceOperator.includes(elem.key.toLowerCase())) { 
-            containerScreen.textContent = 'ERROR';
+            else{ 
+
+            } 
+        }
+
+        else if (numbersOperands.includes(elem.key) && firstNumber && operatorSign) {
+            if (numbersOperands.includes(elem.key) ) {
+                secondNumber += elem.key;
+                containerScreen.textContent += elem.key;
+            } 
+            else{
+
+            }
+        }
+        else{};
+        
+
+        if (equalButton.includes(elem.key) ) {
+            containerScreen.textContent = operate(firstNumber, operatorSign, secondNumber);
             firstNumber = '';
             operatorSign = '';
-        } 
-        else if (!operatorSign && firstNumber) {
-            operatorSign = elem.key.toLowerCase();
-            containerScreen.textContent += elem.key.toLowerCase();
+            secondNumber = '';
         }
-        else if (elem.key.toLowerCase() === '-' && firstNumber === '' && containerScreen.textContent !== 'ERROR') {  
-            firstNumber += elem.key.toLowerCase();
-            containerScreen.textContent += elem.key.toLowerCase();
-        }
-        else if (firstNumber === '') {
-            containerScreen.textContent = 'ERROR';
-        }
-        else if (elem.key.toLowerCase() !== operatorSign && firstNumber && !secondNumber) {
-            operatorSign = elem.key.toLowerCase();
-            containerScreen.textContent = `${firstNumber}${operatorSign}`;
-        }
-        else if (elem.key.toLowerCase() === operatorSign && firstNumber && secondNumber) {
-            if (operate(firstNumber, operatorSign, secondNumber) === 'ERROR') {
-                containerScreen.textContent = 'ERROR';
-                firstNumber = '';
-                operatorSign = '';
-                secondNumber = '';
-            }
-            else {
-                containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.key.toLowerCase()}`;
-                firstNumber = operate(firstNumber, operatorSign, secondNumber); 
-                operatorSign = elem.key.toLowerCase();  
-                secondNumber = ''; 
-            };
-        }
-        else {
-            if (operate(firstNumber, operatorSign, secondNumber) === 'ERROR') {
-                containerScreen.textContent = 'ERROR';
-                firstNumber = '';
-                operatorSign = '';
-                secondNumber = '';
+        else{};  
 
-            }
-            else {
-                containerScreen.textContent = `${operate(firstNumber, operatorSign, secondNumber)}${elem.key.toLowerCase()}`; 
-                firstNumber = operate(firstNumber, operatorSign, secondNumber); 
-                operatorSign = elem.key.toLowerCase(); 
-                secondNumber = ''; 
-                }; 
-        };
-         
-    } 
-    else {};
-
-    console.log(elem.key);
+        if (clearAllInputs.includes(elem.key) ) {
+            containerScreen.textContent = '';
+            firstNumber = '';
+            operatorSign = '';
+            secondNumber = '';
+        }
+        else {};
+        
 
     console.log(`firstNumber is: ${firstNumber}`);
     console.log(`operatorSign is: ${operatorSign}`); 
     console.log(`secondNumber is: ${secondNumber}`);
     console.log(containerScreen.textContent);
-});
+
+    } );
+ 
+
+
+};
+console.log(inputCalculationKeyboard() ); 
+
+
+
+
+
+
+        
