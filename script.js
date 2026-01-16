@@ -200,7 +200,7 @@ function inputCalculation () {
 console.log( inputCalculation() );    
 
 const numbersOperands = ['1','2','3','4','5','6','7','8','9','0']; 
-const pointFloat = ['.']
+const pointFloat = ['.'];
 choiceOperator = ['+', '-', '*', '/'];
 const equalButton = ['Enter'];
 const clearAllInputs = ['`'];
@@ -209,7 +209,12 @@ const clearOneInput = ['Backspace'];
 function inputCalculationKeyboard () {
     document.body.addEventListener('keydown', (elem) => {
         if (numbersOperands.includes(elem.key) && !operatorSign ) { 
-            if (firstNumber === '') {
+            if (containerScreen.textContent && !firstNumber) {
+                containerScreen.textContent = '';
+                firstNumber += elem.key;
+                containerScreen.textContent += elem.key;
+            }
+            else if (firstNumber === '') {
                 firstNumber += elem.key;; 
                 containerScreen.textContent += elem.key;
             }
@@ -217,9 +222,29 @@ function inputCalculationKeyboard () {
                 firstNumber += elem.key;    
                 containerScreen.textContent += elem.key;
             }
-            else {  
+            else {}; 
+        }
 
-            }; 
+        else if (pointFloat.includes(elem.key) && firstNumber && !secondNumber) {
+            if (firstNumber.indexOf('.') === -1) {
+                firstNumber += elem.key;
+                containerScreen.textContent += elem.key;
+            }
+            else if (firstNumber.indexOf('.') > -1) {
+                console.log('only 1 "." in 1st nr.');
+            }
+            else {};
+        }
+
+        else if (pointFloat.includes(elem.key) && firstNumber && secondNumber) {
+            if (secondNumber.indexOf('.') === -1) {
+                secondNumber += elem.key;
+                containerScreen.textContent += elem.key;
+            }
+            else if (secondNumber.indexOf('.') > -1) {
+                console.log('only 1 "." in 2nd nr.');
+            }
+            else {};
         }
 
         else if (choiceOperator.includes(elem.key) ) {
@@ -232,20 +257,42 @@ function inputCalculationKeyboard () {
                 firstNumber += elem.key;
                 containerScreen.textContent += elem.key;
             }
-            else if (elem.key === '-' && firstNumber.indexOf('-') > -1) {
-                firstNumber = '';
+            else if (elem.key === '-' && firstNumber === '-') {
                 containerScreen.textContent = 'ERROR';
-            } 
+            }
+            else if (firstNumber.indexOf('-') > -1 && !operatorSign) {
+                operatorSign = elem.key;
+                containerScreen.textContent += elem.key;
+            }
             else if (choiceOperator.includes(elem.key) && firstNumber === '') {
                 containerScreen.textContent = 'ERROR';
             } 
             else if (firstNumber && !operatorSign) {
                 operatorSign += elem.key;
                 containerScreen.textContent += elem.key;
-            }
-            else{ 
-
             } 
+            else if (firstNumber && operatorSign && elem.key === '-' && secondNumber.indexOf('-') === -1 && secondNumber === '') {
+                secondNumber += elem.key;
+                containerScreen.textContent += elem.key;
+            }
+            else if (firstNumber && operatorSign && elem.key !== operatorSign && !secondNumber) {
+                operatorSign = elem.key;
+                containerScreen.textContent = firstNumber+operatorSign;
+            }
+            else if (firstNumber && operatorSign === '/' && ( secondNumber === '0' || secondNumber === '0.0' || secondNumber === '0.') ) {
+                containerScreen.textContent = 'ERROR';
+                firstNumber = '';
+                operatorSign = '';
+                secondNumber = '';
+            }
+            else if (firstNumber && operatorSign && secondNumber) {
+                let initialResult = String(operate(firstNumber, operatorSign, secondNumber));
+                firstNumber = initialResult; 
+                operatorSign = elem.key;
+                secondNumber = '';
+                containerScreen.textContent = firstNumber+operatorSign;
+            }
+            else {}; 
         }
 
         else if (numbersOperands.includes(elem.key) && firstNumber && operatorSign) {
@@ -253,20 +300,24 @@ function inputCalculationKeyboard () {
                 secondNumber += elem.key;
                 containerScreen.textContent += elem.key;
             } 
-            else{
-
-            }
+            else {};
         }
-        else{};
+
+        else {};
         
 
         if (equalButton.includes(elem.key) ) {
-            containerScreen.textContent = operate(firstNumber, operatorSign, secondNumber);
-            firstNumber = '';
-            operatorSign = '';
-            secondNumber = '';
+            if (firstNumber && operatorSign && secondNumber) {
+                containerScreen.textContent = operate(firstNumber, operatorSign, secondNumber);
+                firstNumber = '';
+                operatorSign = '';
+                secondNumber = '';
+            }
+            else {
+                containerScreen.textContent = 'ERROR';
+            }
         }
-        else{};  
+        else {};  
 
         if (clearAllInputs.includes(elem.key) ) {
             containerScreen.textContent = '';
@@ -276,7 +327,30 @@ function inputCalculationKeyboard () {
         }
         else {};
         
-
+        if (clearOneInput.includes(elem.key) ) {
+            if (firstNumber && !operatorSign) { 
+                let firstNumberCleared = firstNumber.slice(0, -1);
+                firstNumber = firstNumberCleared;
+                containerScreen.textContent = firstNumber;  
+            }
+            else if (firstNumber && operatorSign && !secondNumber) {
+                let operatorSignCleared = operatorSign.slice(0, -1);
+                operatorSign = operatorSignCleared;
+                containerScreen.textContent = firstNumber + operatorSign;
+            }
+            else if (firstNumber && operatorSign && secondNumber) {
+                let secondNumberCleared = secondNumber.slice(0, -1);
+                secondNumber = secondNumberCleared;
+                containerScreen.textContent = firstNumber + operatorSign + secondNumber;
+            }
+            else if (containerScreen) {
+                let containerScreenCleared = containerScreen.textContent.slice(0, -1);
+                containerScreen.textContent = containerScreenCleared;
+            }
+            else {};
+        }
+        else {};
+    
     console.log(`firstNumber is: ${firstNumber}`);
     console.log(`operatorSign is: ${operatorSign}`); 
     console.log(`secondNumber is: ${secondNumber}`);
