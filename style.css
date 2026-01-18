@@ -6,54 +6,62 @@
 }
 
 body {
-    
+    background-color: blanchedalmond;
+}
+
+.title {
+    text-align: center;
+    text-decoration: underline;
+    margin: 200px auto 20px auto; 
+    font-size: 40px;
 }
 
 .containerCalculator {
-    padding: 50px;
-    width: 450px;  
-    height: 650px;
-    margin: 50px;
+    padding: 10px;
+    width: 422px;         
+    height: 521px;       
+    margin: 20px auto;   
+    border: 1px solid darkblue;
+    background-color: darkgreen;
 } 
 
-.containerScreen {
+.containerScreen{
     background-color: darkcyan;
-
-}
-
-.screen{
     border: 1px solid black;
     height: 100px;
-    width: 350px;  
-    padding: 10px; 
+    width: 400px;     
+    padding: 10px;  
     font-size: 40px;  
 }
 
-div button { 
-    height: 70px;
-    width: 70px;
-    font-size: 20px;
-    background-color: red;
-}
-
 .containerNumbers {
+    width: 400px;   
     display: flex;
     flex-wrap: wrap; 
 }
 
 
+div button { 
+    height: 80px;
+    width: 80px; 
+    font-size: 40px;  
+    background-color: red;
+}
+
+
 .equal {
-    width: 350px;
+    width: 400px;
 }
 
 .containerInputControl {
     display: flex;
+    width: 400px;  
 }
 
-.clearAll {
-    width: 175px;
+.clearAll {  
+    width: 200px;
 }
 
 .clearOne {
-    width: 175px;
+    width: 200px; 
 }

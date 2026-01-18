@@ -111,6 +111,16 @@ function inputCalculation () {
                 else if (firstNumber === '') {
                     containerScreen.textContent = 'ERROR';
                 }
+                else if (firstNumber && operatorSign && secondNumber === '' && secondNumber.indexOf('-') === -1) {
+                    secondNumber = elem.target.textContent;
+                    containerScreen.textContent += elem.target.textContent;
+                }
+                else if (firstNumber && operatorSign && secondNumber.indexOf('-') > -1 && elem.target.textContent === '-') {
+                    containerScreen.textContent = 'ERROR';
+                    firstNumber = '';
+                    operatorSign = '';
+                    secondNumber = '';
+                }
                 else if (elem.target.textContent !== operatorSign && firstNumber && !secondNumber) {
                     operatorSign = elem.target.textContent.trim();
                     containerScreen.textContent = `${firstNumber}${operatorSign}`;
@@ -152,7 +162,6 @@ function inputCalculation () {
             console.log(`operatorSign is: ${operatorSign}`); 
             console.log(`secondNumber is: ${secondNumber}`);
             console.log(containerScreen.textContent);
-
         } ); 
     } );
 
@@ -191,6 +200,13 @@ function inputCalculation () {
             let secondNumberCleared = String(secondNumber).slice(0, -1);
             secondNumber = secondNumberCleared;
             containerScreen.textContent = firstNumber + operatorSign + secondNumber;
+        }
+        else if (containerScreen.textContent === 'ERROR') {
+            containerScreen.textContent = '';
+        }
+        else if (containerScreen.textContent !== 'ERROR') {
+            let containerScreenClearedMouse = containerScreen.textContent.slice(0, -1);
+            containerScreen.textContent = containerScreenClearedMouse;
         }
         else {
             containerScreen.textContent = 'ERROR';
@@ -271,6 +287,12 @@ function inputCalculationKeyboard () {
                 operatorSign += elem.key;
                 containerScreen.textContent += elem.key;
             } 
+            else if (secondNumber.indexOf('-') > -1 && elem.key === '-') {
+                containerScreen.textContent = 'ERROR';
+                firstNumber = '';
+                operatorSign = '';
+                secondNumber = '';
+            }
             else if (firstNumber && operatorSign && elem.key === '-' && secondNumber.indexOf('-') === -1 && secondNumber === '') {
                 secondNumber += elem.key;
                 containerScreen.textContent += elem.key;
@@ -343,7 +365,10 @@ function inputCalculationKeyboard () {
                 secondNumber = secondNumberCleared;
                 containerScreen.textContent = firstNumber + operatorSign + secondNumber;
             }
-            else if (containerScreen) {
+            else if (containerScreen.textContent === 'ERROR') {
+                containerScreen.textContent = '';
+            }
+            else if (containerScreen.textContent !== 'ERROR') {
                 let containerScreenCleared = containerScreen.textContent.slice(0, -1);
                 containerScreen.textContent = containerScreenCleared;
             }
