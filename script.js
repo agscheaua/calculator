@@ -81,12 +81,16 @@ function inputCalculation () {
                 else{
                         if (secondNumber === '' && elem.target.textContent === '.') {
                             containerScreen.textContent = "ERROR";
+                            firstNumber = '';
+                            operatorSign = '';
                         }
                         else if (secondNumber.indexOf('.') > -1 && elem.target.textContent === '.') {
                             console.log('only 1 "." in secondNumber :D');
                         }
                         else if (containerScreen.textContent === 'ERROR' && firstNumber && operatorSign) {
                             containerScreen.textContent = 'ERROR';
+                            firstNumber = '';
+                            operatorSign = '';
                         }
                         else {
                             secondNumber += elem.target.textContent.trim();
@@ -94,22 +98,29 @@ function inputCalculation () {
                         };  
                     };
             }
-            else if ( choiceOperator.includes(elem.target.textContent) ) {
-                if (firstNumber === '-' && choiceOperator.includes(elem.target.textContent)) { 
+            else if ( choiceOperator.includes(elem.target.textContent.trim()) ) {
+                if (firstNumber === '-') { 
                     containerScreen.textContent = 'ERROR';
-                    firstNumber = '';
+                    firstNumber = ''; 
                     operatorSign = '';
                 } 
-                else if (!operatorSign && firstNumber) {
-                    operatorSign = elem.target.textContent.trim();
-                    containerScreen.textContent += elem.target.textContent.trim();
+                else if (elem.target.textContent.trim() !== '-' && !firstNumber) {
+                    containerScreen.textContent = 'ERROR';
+                    firstNumber = ''; 
+                    operatorSign = '';
                 }
-                else if (elem.target.textContent === '-' && firstNumber === '' && containerScreen.textContent !== 'ERROR') {  
+                else if (elem.target.textContent === '-' && firstNumber === '' && containerScreen.textContent) {
+                    containerScreen.textContent = '';  
                     firstNumber += elem.target.textContent.trim();
                     containerScreen.textContent += elem.target.textContent.trim();
                 }
                 else if (firstNumber === '') {
-                    containerScreen.textContent = 'ERROR';
+                    firstNumber += elem.target.textContent.trim(); 
+                    containerScreen.textContent += elem.target.textContent.trim(); 
+                }
+                else if (!operatorSign && firstNumber) {
+                    operatorSign = elem.target.textContent.trim();
+                    containerScreen.textContent += elem.target.textContent.trim();
                 }
                 else if (firstNumber && operatorSign && secondNumber === '' && secondNumber.indexOf('-') === -1) {
                     secondNumber = elem.target.textContent;
@@ -175,6 +186,9 @@ function inputCalculation () {
         }
         else {
             containerScreen.textContent = 'ERROR';   
+            firstNumber = '';
+            operatorSign = '';
+            secondNumber = '';
         };
     } );
 
@@ -337,6 +351,9 @@ function inputCalculationKeyboard () {
             }
             else {
                 containerScreen.textContent = 'ERROR';
+                firstNumber = '';
+                operatorSign = '';
+                secondNumber = '';
             }
         }
         else {};  
