@@ -278,7 +278,7 @@ function inputCalculationKeyboard () {
         }
 
         else if (choiceOperator.includes(elem.key) ) {
-            if (containerScreen.textContent === 'ERROR' && elem.key === '-' && firstNumber === '') {
+            if (containerScreen.textContent && elem.key === '-' && firstNumber === '') {
                 containerScreen.textContent = '';
                 firstNumber += elem.key;
                 containerScreen.textContent += elem.key; 
